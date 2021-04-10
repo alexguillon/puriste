@@ -1,0 +1,1 @@
+exports.GAME_MODE = ["MULTI"]
