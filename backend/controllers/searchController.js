@@ -1,6 +1,6 @@
-const searchServices = require('../services/searchServices')
+const searchServices = require('../services/searchServices');
 
-const { searchArtist } = searchServices
+const { searchArtist } = searchServices;
 
 exports.search = async (req, res, next) => {
     try {

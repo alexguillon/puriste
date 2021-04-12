@@ -8,7 +8,6 @@ const cors = require('cors');
 const searchRoutes = require('./routes/searchRoutes');
 const quizzRoutes = require('./routes/quizzRoutes');
 
-const globalErrHandler = require('./controllers/errorController');
 const AppError = require('./utils/appError');
 const app = express();
 
@@ -40,14 +39,12 @@ app.use(hpp());
 
 // Routes
 app.use('/api/v1/search', searchRoutes);
-app.use('/api/v1/track', quizzRoutes);
+app.use('/api/v1/quizz', quizzRoutes);
 
 // handle undefined Routes
 app.use('*', (req, res, next) => {
     const err = new AppError(404, 'fail', 'undefined route');
     next(err, req, res, next);
 });
-
-app.use(globalErrHandler);
 
 module.exports = app;

@@ -1,6 +1,9 @@
 const { GAME_MODE } = require('../utils/quizzConstants');
+const quizzServices = require('../services/quizzServices');
 
-exports.newQuizz = async (req, res, next) => {
+const { launchNewQuizz } = quizzServices;
+
+exports.quizz = async (req, res, next) => {
     try {
         if(req.query.mode){
             if(GAME_MODE.includes(req.query.mode)){
@@ -8,10 +11,10 @@ exports.newQuizz = async (req, res, next) => {
                     let result = await launchNewQuizz(req.query.artist);
                     res.status(200).json(result);
                 }else{
-
+                    res.status(400).json({
+                        error: "Missing artist parameter."
+                    })
                 }
-                let result = await launchNewQuizz();
-                res.status(200).json(result);
             }else{
                 res.status(400).json({
                     error: "Invalid game mode parameter."
@@ -23,6 +26,8 @@ exports.newQuizz = async (req, res, next) => {
             })
         }
     } catch (error) {
-        next(error);
+        res.status(400).json({
+            error: error
+        })
     }
 };
