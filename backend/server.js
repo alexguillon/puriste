@@ -14,6 +14,8 @@ app.listen(port, () => {
     console.log(`Application is running on port ${port}`);
 });
 
+process.setMaxListeners(0);
+
 process.on('unhandledRejection', err => {
     console.log('UNHANDLED REJECTION!!!  shutting down ...');
     console.log(err.name, err.message);
