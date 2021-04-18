@@ -11,6 +11,7 @@ exports.startGame = async (session, username, mode, artist) => {
     session.points = "0";
     session.mode = mode;
     session.artist = artist;
+    session.trackAlreadyAsked = [];
     let returnedObject = {};
     returnedObject.username = username;
     returnedObject.artist = artist;
@@ -30,7 +31,11 @@ exports.getQuestion = async (session) => {
     let albumTracks = await spotifyService.getAlbumTracklist(randomAlbum.id);
     let randomTrack = pickRandomElement(albumTracks.data.items);
     let trackInfo = await spotifyService.getTrack(randomTrack.id);
+    while(session.trackAlreadyAsked.includes(trackInfo.data.id)){
+      trackInfo = await spotifyService.getTrack(randomTrack.id);
+    } 
     let trackFormattedInfo = getFormattedTrackQuestion(trackInfo.data);
+    session.trackAlreadyAsked.push(trackFormattedInfo.id);
     session.currentYearAnswer = getTrackAnswer(trackInfo.data);
     session.currentQuestion = trackFormattedInfo.id;
     return trackFormattedInfo;
@@ -99,6 +104,7 @@ function checkAnswer(session, year){
     returnedObject.answer = true;
   }else{
     session.endGame = true;
+    delete session.trackAlreadyAsked;
     returnedObject.answer = false;
   }
   returnedObject.points = parseInt(session.points);
