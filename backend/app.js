@@ -53,6 +53,7 @@ app.use(xss());
 // Prevent parameter pollution
 app.use(hpp());
 
+// Parsing cookie
 app.use(cookieParser());
 
 // Routes

@@ -4,7 +4,7 @@ const btoa = require('btoa');
 const NodeCache = require( "node-cache" );
 const spotifyCache = new NodeCache( { stdTTL: 3480, checkperiod: 3600 } );
 
-async function callAccessToken() {
+async function callAccessToken() { // get public access token and cache it during one hour
     var data = qs.stringify({
         'grant_type': 'client_credentials' 
     });
@@ -29,7 +29,7 @@ async function callAccessToken() {
 }
 
 async function getAccessToken() {
-    if(spotifyCache.get("access_token") === undefined){
+    if(spotifyCache.get("access_token") === undefined){ // if the access token is not cached anymore, we get another one
         if(!(await callAccessToken())){
             return undefined;
         }

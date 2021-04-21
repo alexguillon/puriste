@@ -3,7 +3,7 @@ const mathsUtils = require("../utils/mathsUtils");
 const { SINGLE_TYPE } = require('../utils/quizzConstants');
 
 exports.startGame = async (session, username, mode, artist) => {
-  try {
+  try { // we initialize a new session
     if(session.endGame){
       delete session.endGame;
     }
@@ -21,7 +21,7 @@ exports.startGame = async (session, username, mode, artist) => {
   }
 }
 
-exports.getQuestion = async (session) => {
+exports.getQuestion = async (session) => { // pick a random album, then a random song in the album
   try {
     let albums = await spotifyService.getAlbums(session.artist);
     if(albums.status != 200){
@@ -29,13 +29,16 @@ exports.getQuestion = async (session) => {
     }
     let randomAlbum = pickRandomElement(albums.data.items);
     let albumTracks = await spotifyService.getAlbumTracklist(randomAlbum.id);
+    if(albumTracks.status != 200){
+      throw "Spotify " + albums.message;
+    }
     let randomTrack = pickRandomElement(albumTracks.data.items);
-    let trackInfo = await spotifyService.getTrack(randomTrack.id);
-    while(session.trackAlreadyAsked.includes(trackInfo.data.id)){
+    let trackInfo = await spotifyService.getTrack(randomTrack.id); // get informations about the track we picked randomly
+    while(trackInfo.status == 200 && session.trackAlreadyAsked.includes(trackInfo.data.id)){ // while we already asked the track to the user
       trackInfo = await spotifyService.getTrack(randomTrack.id);
     } 
     let trackFormattedInfo = getFormattedTrackQuestion(trackInfo.data);
-    session.trackAlreadyAsked.push(trackFormattedInfo.id);
+    session.trackAlreadyAsked.push(trackFormattedInfo.id); // update redis session management object 
     session.currentYearAnswer = getTrackAnswer(trackInfo.data);
     session.currentQuestion = trackFormattedInfo.id;
     return trackFormattedInfo;
@@ -100,9 +103,9 @@ function getTrackAnswer(track){
 function checkAnswer(session, year){
   let returnedObject = {};
   if(session.currentYearAnswer === year){
-    session.points = (parseInt(session.points) + 1).toString();
+    session.points = (parseInt(session.points) + 1).toString(); // + 1 point
     returnedObject.answer = true;
-  }else{
+  }else{ // we end the game by adding a new session parameter for future API call
     session.endGame = true;
     delete session.trackAlreadyAsked;
     returnedObject.answer = false;
