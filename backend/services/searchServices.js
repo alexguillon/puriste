@@ -4,7 +4,7 @@ exports.searchArtist = async (name, offset) => {
   try {
     let spotifyOffset = offset*5; // we want artists results by series of 5
     let results = await spotifyService.searchArtist(name, spotifyOffset);
-    let response = getFormattedSearchlistAnswer(results);
+    let response = getFormattedSearchlistAnswer(results); // get a formatted answer from spotify results
     return response;
   } catch(e) {
     throw new Error(e.message)
