@@ -4,7 +4,7 @@ const btoa = require('btoa');
 const NodeCache = require( "node-cache" );
 const spotifyCache = new NodeCache( { stdTTL: 3480, checkperiod: 3600 } );
 
-async function callAccessToken() { // get public access token and cache it during one hour
+callAccessToken = () => { // get public access token and cache it during one hour
     var data = qs.stringify({
         'grant_type': 'client_credentials' 
     });
@@ -28,7 +28,7 @@ async function callAccessToken() { // get public access token and cache it durin
     });
 }
 
-async function getAccessToken() {
+getAccessToken = () => {
     if(spotifyCache.get("access_token") === undefined){ // if the access token is not cached anymore, we get another one
         if(!(await callAccessToken())){
             return undefined;
@@ -37,9 +37,7 @@ async function getAccessToken() {
     return spotifyCache.get("access_token");
 }
 
-function getBase64Credentials(){
-    return btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET);
-}
+getBase64Credentials = () => btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET);
 
 exports.searchArtist = async (name, offset) => {
     let accessToken = await getAccessToken();

@@ -62,7 +62,7 @@ exports.answer = async (session, songID, year) => {
   }
 }
 
-async function getTopTracks(artist){
+getTopTracks = async artist => {
   let mostPopularSongs = await spotifyService.getTopSongs(artist);
     if(mostPopularSongs.status != 200){
       throw "Spotify " + mostPopularSongs.message;
@@ -75,12 +75,12 @@ async function getTopTracks(artist){
     return tracks;
 }
 
-function pickRandomElement(array){
+pickRandomElement = array => {
   let random = mathsUtils.getRandomInt(array.length);
   return array[random];
 }
 
-function getFormattedTrackQuestion(track){
+getFormattedTrackQuestion = track => {
   let trackObject = {};
   trackObject.artist = "";
   track.artists.forEach((artist, index) => {
@@ -96,11 +96,9 @@ function getFormattedTrackQuestion(track){
   return trackObject;
 }
 
-function getTrackAnswer(track){
-  return track.album.release_date ? new Date(track.album.release_date).getFullYear() : undefined;
-}
+getTrackAnswer = track => (track.album.release_date ? new Date(track.album.release_date).getFullYear() : undefined);
 
-function checkAnswer(session, year){
+checkAnswer = (session, year) => {
   let returnedObject = {};
   if(session.currentYearAnswer === year){
     session.points = (parseInt(session.points) + 1).toString(); // + 1 point

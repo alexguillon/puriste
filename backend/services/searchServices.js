@@ -11,7 +11,7 @@ exports.searchArtist = async (name, offset) => {
   }
 }
 
-function getFormattedSearchlistAnswer(results){
+getFormattedSearchlistAnswer = results => {
   let response = {};
   response.total = results.artists.total;
   response.artists = [];
