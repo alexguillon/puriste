@@ -12,10 +12,7 @@ exports.startGame = async (session, username, mode, artist) => {
     session.mode = mode;
     session.artist = artist;
     session.trackAlreadyAsked = [];
-    let returnedObject = {};
-    returnedObject.username = username;
-    returnedObject.artist = artist;
-    return returnedObject;
+    return { username, artist, points: session.points };
   } catch(e){
     throw e;
   }
@@ -88,7 +85,9 @@ getFormattedTrackQuestion = track => {
   });
   trackObject.name = track.name;
   trackObject.id = track.id;
-  trackObject.preview = track.preview_url;
+  if(track.preview_url){ //sometimes we don't have a preview url
+    trackObject.preview = track.preview_url;
+  }
   trackObject.type = track.album.album_type;
   if(trackObject.type !== SINGLE_TYPE){
     trackObject.album = track.album.name;
