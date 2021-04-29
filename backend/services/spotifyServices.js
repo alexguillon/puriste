@@ -29,7 +29,7 @@ callAccessToken = async () => { // get public access token and cache it during o
 }
 
 getAccessToken = async () => {
-    if(spotifyCache.get("access_token") === undefined){ // if the access token is not cached anymore, we get another one
+    if(spotifyCache.get("access_token") === undefined){ // if the access token is not cached anymore, we get a new token
         if(!(await callAccessToken())){
             return undefined;
         }
@@ -123,6 +123,24 @@ exports.getTrack = async (track) => {
     return axios(config)
     .then(function (response) {
         return response;
+    })
+    .catch(function (error) {
+        return error;
+    });
+}
+
+exports.searchTracks = async (name, offset, limit) => {
+    let accessToken = await getAccessToken();
+    var config = {
+        method: 'get',
+        url: `${process.env.SPOTIFY_API_SERVICE_HOST}/v1/search?query=${name}&type=track&offset=${offset}&limit=${limit}`,
+        headers: { 
+          'Authorization': `Bearer ${accessToken}`, 
+        }
+    };
+    return axios(config)
+    .then(function (response) {
+        return response.data;
     })
     .catch(function (error) {
         return error;

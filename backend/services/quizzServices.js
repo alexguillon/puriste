@@ -1,6 +1,5 @@
 const spotifyService = require("./spotifyServices");
-const mathsUtils = require("../utils/mathsUtils");
-const { SINGLE_TYPE } = require('../utils/quizzConstants');
+const { getFormattedTrackQuestion, getTrackAnswer, pickRandomElement } = require('../utils/formattedUtils');
 
 exports.startGame = async (session, username, mode, artist) => {
   try { // we initialize a new session
@@ -72,30 +71,6 @@ getTopTracks = async artist => {
     return tracks;
 }
 
-pickRandomElement = array => {
-  let random = mathsUtils.getRandomInt(array.length);
-  return array[random];
-}
-
-getFormattedTrackQuestion = track => {
-  let trackObject = {};
-  trackObject.artist = "";
-  track.artists.forEach((artist, index) => {
-    trackObject.artist += (index > 0) ? ", " + artist.name : artist.name;
-  });
-  trackObject.name = track.name;
-  trackObject.id = track.id;
-  if(track.preview_url){ //sometimes we don't have a preview url
-    trackObject.preview = track.preview_url;
-  }
-  trackObject.type = track.album.album_type;
-  if(trackObject.type !== SINGLE_TYPE){
-    trackObject.album = track.album.name;
-  }
-  return trackObject;
-}
-
-getTrackAnswer = track => (track.album.release_date ? new Date(track.album.release_date).getFullYear() : undefined);
 
 checkAnswer = (session, year) => {
   let returnedObject = {};
