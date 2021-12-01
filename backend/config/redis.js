@@ -1,5 +1,7 @@
-const redis = require('redis');
-const dotenv = require('dotenv').config();
+import redis from 'redis';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const redisClient = redis.createClient({
     host: process.env.REDIS_HOST,
@@ -13,4 +15,4 @@ redisClient.on('connect', function (err) {
     console.log('Connected to redis successfully');
 });
 
-module.exports = redisClient;
+export { redisClient };
