@@ -1,10 +1,10 @@
-const axios = require('axios');
-const qs = require('qs');
-const btoa = require('btoa');
-const NodeCache = require( "node-cache" );
+import axios from 'axios';
+import qs from 'qs';
+import btoa from 'btoa';
+import NodeCache from 'node-cache';
 const spotifyCache = new NodeCache( { stdTTL: 3480, checkperiod: 3600 } );
 
-callAccessToken = async () => { // get public access token and cache it during one hour
+const callAccessToken = async () => { // get public access token and cache it during one hour
     var data = qs.stringify({
         'grant_type': 'client_credentials' 
     });
@@ -28,7 +28,7 @@ callAccessToken = async () => { // get public access token and cache it during o
     });
 }
 
-getAccessToken = async () => {
+const getAccessToken = async () => {
     if(spotifyCache.get("access_token") === undefined){ // if the access token is not cached anymore, we get a new token
         if(!(await callAccessToken())){
             return undefined;
@@ -37,9 +37,9 @@ getAccessToken = async () => {
     return spotifyCache.get("access_token");
 }
 
-getBase64Credentials = () => btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET);
+const getBase64Credentials = () => btoa(process.env.CLIENT_ID + ':' + process.env.CLIENT_SECRET);
 
-exports.searchArtist = async (name, offset) => {
+export async function searchArtist(name, offset) {
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
@@ -57,7 +57,7 @@ exports.searchArtist = async (name, offset) => {
     });
 }
 
-exports.getTopSongs = async (artist) => {
+export async function getTopSongs(artist) {
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
@@ -75,7 +75,7 @@ exports.getTopSongs = async (artist) => {
     });
 }
 
-exports.getAlbums = async (artist) => {
+export async function getAlbums(artist) {
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
@@ -93,7 +93,7 @@ exports.getAlbums = async (artist) => {
     });
 }
 
-exports.getAlbumTracklist = async (album) => {
+export async function getAlbumTracklist(album) {
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
@@ -111,7 +111,7 @@ exports.getAlbumTracklist = async (album) => {
     });
 }
 
-exports.getTrack = async (track) => {
+export async function getTrack(track){
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
@@ -129,7 +129,7 @@ exports.getTrack = async (track) => {
     });
 }
 
-exports.searchTracks = async (name, offset, limit) => {
+export async function searchTracks(name, offset, limit) {
     let accessToken = await getAccessToken();
     var config = {
         method: 'get',
