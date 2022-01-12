@@ -4,8 +4,7 @@ import cors from 'fastify-cors';
 import rateLimit from 'fastify-rate-limit';
 import cookie from 'fastify-cookie';
 import sensible from 'fastify-sensible';
-import redis from 'fastify-redis';
-import { redisClient } from '../../config/redis.js';
+import Redis from 'ioredis';
 import session from '@mgcrea/fastify-session';
 import sessionRedisStore from '@mgcrea/fastify-session-redis-store';
 
@@ -15,6 +14,7 @@ dotenv.config();
 
 export default plugin(async (instance) => {
     const { RedisStore } = sessionRedisStore;
+    
     instance.register(helmet);
     instance.register(cors);
     instance.register(sensible, { errorHandler: false });
@@ -24,16 +24,11 @@ export default plugin(async (instance) => {
         message: 'Too Many Request from this IP, please try again in an hour'
     });
     instance.register(cookie);
-    instance.register(redis, {
-        client: redisClient
-    });
     instance.register(session, {
         secret: process.env.REDIS_CLIENT_SECRET,
-        store: new RedisStore({ host: process.env.REDIS_HOST, port: process.env.REDIS_PORT, client: redisClient}),
-        resave: false,
-        saveUninitialized: false,
+        store: new RedisStore({ client: new Redis(process.env.REDIS_URI), ttl: process.env.REDIS_TTL }),
         cookie: {
-            maxAge: 1000 * 60 * 10 // session max age in miliseconds
+            maxAge: process.env.REDIS_TTL,
         }
     });
     return instance;
