@@ -1,4 +1,7 @@
 import { startGame } from './quizz.services.js';
+import { validateSession } from './quizz.handler.js';
+import { GAME_MODE } from './quizz.constants.js';
+import _ from 'lodash';
 
 function startQuizzRoute() {
     return {
@@ -9,15 +12,21 @@ function startQuizzRoute() {
             type: 'object',
             properties: {
                 username: { type: 'string' },
-                mode: { type: 'string' },
+                mode: { type: 'string', enum: GAME_MODE },
                 artist: { type: 'string' },
             },
             required: ['username', 'mode', 'artist'],
         },
         },
-        handler: async (request) => {
-            const { session } = request;
-            const { username, mode, artist } = request.body;
+        handler: async function(request, reply)  {
+            const { session, body } = request;
+            try {
+                const playerSessionData = _.get(session.data, session.id);
+                validateSession(playerSessionData);
+            }catch(error){
+                reply.code(400).send(error);
+            }
+            const { username, mode, artist } = body;
             const result = await startGame({ session, username, mode, artist });
             return result;
         },

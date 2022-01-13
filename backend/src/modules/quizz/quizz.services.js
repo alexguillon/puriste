@@ -1,19 +1,15 @@
-import { getAlbums, getAlbumTracklist, getTrack, getTopSongs } from "../../services/spotify.services.js"
+import { getAlbums, getAlbumTracklist, getTrack, getTopSongs } from "../../services/spotify.services.js";
+import { formatStartGamePayload } from './quizz.model.js';
 import { getFormattedTrackQuestion, getTrackAnswer, pickRandomElement } from '../../utils/formattedUtils.js';
 
 export async function startGame({ session, username, mode, artist }){
-  try { // we initialize a new session
-    if(session.endGame){
-      delete session.endGame;
-    }
-    session.username = username;
-    session.points = "0";
-    session.mode = mode;
-    session.artist = artist;
-    session.trackAlreadyAsked = [];
-    return { username, artist, points: session.points };
-  } catch(e){
-    throw e;
+  try {
+    const { id: playerSessionId } = session;
+    const playerStartGamePayload = formatStartGamePayload({ username, mode, artist });
+    session.set(playerSessionId, playerStartGamePayload);
+    return { ...playerStartGamePayload };
+  } catch(error){
+    throw error;
   }
 }
 

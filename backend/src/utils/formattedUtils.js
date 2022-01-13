@@ -1,5 +1,5 @@
 import { getRandomInt } from './mathsUtils.js';
-import { SINGLE_TYPE } from './quizzConstants.js';
+import { SINGLE_TYPE } from '../modules/quizz/quizz.constants.js';
 
 export function getFormattedTrackQuestion(track) {
     let trackObject = {};
