@@ -3,29 +3,33 @@
   "version": "1.0.0",
   "description": "Backend spotiquizz",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon server.js"
+    "dev": "nodemon index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "lodash": "^4.17.21",
     "axios": "^0.21.1",
-    "body-parser": "^1.19.0",
+    "qs": "6.10.2",
     "btoa": "^1.2.1",
-    "connect-redis": "^5.1.0",
-    "cookie-parser": "^1.4.5",
-    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-rate-limit": "^5.2.6",
-    "express-session": "^1.17.1",
-    "helmet": "^4.4.1",
-    "hpp": "^0.2.3",
     "node-cache": "^5.1.2",
     "nodemon": "^2.0.7",
+    "ioredis": "^4.28.3",
     "redis": "^3.1.1",
-    "xss-clean": "^0.1.1"
+    "fastify": "^3.24.0",
+    "fastify-plugin": "^3.0.0",
+    "fastify-helmet": "^5.3.2",
+    "fastify-rate-limit": "^5.6.2",
+    "fastify-cors": "^6.0.2",
+    "fastify-cookie": "^5.4.0",
+    "fastify-redis": "^4.3.3",
+    "fastify-sensible": "3.1.2",
+    "@mgcrea/fastify-session": "^0.14.2",
+    "@mgcrea/fastify-session-redis-store": "^0.11.0"
   },
   "devDependencies": {
     "jest": "^26.6.3"
