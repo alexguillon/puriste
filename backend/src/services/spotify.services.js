@@ -20,7 +20,6 @@ const callAccessToken = async () => { // get public access token and cache it du
     return axios(config)
     .then(function (response) {
         bearerCache = spotifyCache.set("access_token", response.data.access_token)
-        console.log(response.data.access_token);
         return bearerCache;
     })
     .catch(function (error) {

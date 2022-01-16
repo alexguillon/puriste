@@ -77,14 +77,14 @@ const getTopTracks = async artist => {
 const checkAnswer = (session, year) => {
   let returnedObject = {};
   if(session.currentYearAnswer === year){
-    session.points = (parseInt(session.points) + 1).toString(); // + 1 point
+    session.points = session.points + 1; // + 1 point
     returnedObject.answer = true;
   }else{ // we end the game by adding a new session parameter for future API call
     session.endGame = true;
     delete session.trackAlreadyAsked;
     returnedObject.answer = false;
   }
-  returnedObject.points = parseInt(session.points);
+  returnedObject.points = session.points;
   returnedObject.release_year = session.currentYearAnswer;
   return returnedObject;
 }

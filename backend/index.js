@@ -9,10 +9,9 @@ const app = server();
 
 const start = async () => {
   try {
-    console.log(process.env.PORT);
     await app.listen(process.env.PORT, process.env.HOST);
   } catch (err) {
-    console.log(err);
+    console.error(err);
     app.log.error(err);
     process.exit(1);
   }

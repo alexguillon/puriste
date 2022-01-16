@@ -30,8 +30,12 @@ function startQuizzRoute() {
         handler: async (request) => {
             const { session, body } = request;
             const { username, mode, artist } = body;
-            const result = await startGame({ session, username, mode, artist });
-            return result;
+            try {
+                const result = await startGame({ session, username, mode, artist });
+                return result;
+            }catch(error){
+                reply.code(400).send(error);
+            }
         },
     };
 }
@@ -43,7 +47,6 @@ function askQuizzRoute() {
         preValidation: async (request, reply) => {
             const { session } = request;
             try {
-                console.log(session);
                 const { username, endGame, currentQuestion } = _.get(session.data, session.id);
                 validateQuizzSession({ username, endGame, currentQuestion });
             }catch(error){
@@ -53,8 +56,12 @@ function askQuizzRoute() {
         handler: async (request) =>  {
             const { session } = request;
             const playerSession = _.get(session.data, session.id);
-            const result = await getQuestion({ session, playerSession });
-            return result;
+            try {
+                const result = await getQuestion({ session, playerSession });
+                return result;
+            }catch(error){
+                reply.code(400).send(error);
+            }
         },
     };
 }
@@ -83,12 +90,16 @@ function answerQuizzRoute() {
                 reply.code(400).send(error);
             }
         },
-        handler: async (request) => {
+        handler: async (request, reply) => {
             const { session, body } = request;
             const playerSession = _.get(session.data, session.id);
             const { songID, year } = body;
-            const result = await answer({ session, playerSession, songID, year });
-            return result;
+            try {
+                const result = await answer({ session, playerSession, songID, year });
+                return result;
+            }catch(error){
+                reply.code(400).send(error);
+            }
         },
     };
 }
