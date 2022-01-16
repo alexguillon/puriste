@@ -2,8 +2,9 @@ import { getRandomInt } from './mathsUtils.js';
 import { SINGLE_TYPE } from '../modules/quizz/quizz.constants.js';
 
 export function getFormattedTrackQuestion(track) {
-    let trackObject = {};
-    trackObject.artist = "";
+    let trackObject = {
+      artist: ""
+    };
     track.artists.forEach((artist, index) => {
       trackObject.artist += (index > 0) ? ", " + artist.name : artist.name;
     });
