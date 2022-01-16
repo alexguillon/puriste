@@ -8,10 +8,6 @@ import Redis from 'ioredis';
 import session from '@mgcrea/fastify-session';
 import sessionRedisStore from '@mgcrea/fastify-session-redis-store';
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 export default plugin(async (instance) => {
     const { RedisStore } = sessionRedisStore;
     
